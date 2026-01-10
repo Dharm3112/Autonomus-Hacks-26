@@ -26,5 +26,3 @@ While the current MVP demonstrates the core autonomous loop, the vision for **Au
 ### 5. 🔌 Live Market APIs
 * **Current:** Mock database for demonstration.
 * **Future:** Integrate **eBay Sell API** and **Kelley Blue Book API**. The tool will pull the *exact* average sold price for the last 30 days in the user's specific zip code to ensure zero money is left on the table.
-
-```
