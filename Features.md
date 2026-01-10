@@ -2,7 +2,7 @@
 > **Hackathon 2026 Submission** | *Reclaiming your time from low-ballers.*
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)
-![Gemini](https://img.shields.io/badge/AI-Gemini%201.5%20Flash-orange)
+![Gemini](https://img.shields.io/badge/AI-Gemini%202.5%20Flash-orange)
 ![Status](https://img.shields.io/badge/Status-Autonomous-green)
 
 ## 💡 The Problem
