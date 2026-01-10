@@ -37,7 +37,7 @@ def check_market_price(item_name: str):
 tools = [check_market_price]
 
 model = genai.GenerativeModel(
-    model_name='gemini-1.5-flash',
+    model_name='gemini-2.5-flash',
     tools=tools,
     system_instruction="""
     You are 'The Closer', a ruthless negotiation agent.
@@ -55,7 +55,7 @@ model = genai.GenerativeModel(
 # 4. The Chat Loop
 def start_agent():
     print("--------------------------------------------------")
-    print("🤖 AUTO-HAGGLE AGENT ONLINE (Gemini 1.5 Flash)")
+    print("🤖 AUTO-HAGGLE AGENT ONLINE (Gemini 2.5 Flash)")
     print("--------------------------------------------------")
     
     # Enable automatic tool use (Agent Mode)
