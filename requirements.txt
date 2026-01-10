@@ -2,3 +2,5 @@ google-generativeai
 python-dotenv
 streamlit
 pyperclip
+Pillow
+google-adk
