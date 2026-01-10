@@ -5,7 +5,15 @@ MARKET_DB = {
     "monitor": 200,
     "airpods": 150,
     "macbook": 800,
-    "chair": 100
+    "chair": 100,
+    "iphone": 999,
+    "ps5": 500,
+    "tesla": 45000,
+    "coffee": 5,
+    "t-shirt": 25,
+    "camera": 600,
+    "watch": 250,
+    "headphones": 100
 }
 
 def check_market_price(item_name: str):

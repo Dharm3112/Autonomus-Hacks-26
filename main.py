@@ -1,7 +1,5 @@
 import asyncio
 import sys
-from google.adk.runners import InMemoryRunner
-from google.adk.types import ChatMessage
 from src.agent import build_agent
 
 async def main():
@@ -12,12 +10,12 @@ async def main():
         except AttributeError:
             pass
 
-    print("🤖 AGENT ONLINE (ADK Powered). Type 'quit' to exit.")
+    print("🤖 AGENT ONLINE (Standard Mode). Type 'quit' to exit.")
     
-    # Initialize the agent and runner
+    # Initialize the agent
     agent = build_agent()
-    runner = InMemoryRunner(agent=agent)
-    session_id = "cli_session_01"
+    # Start a chat session (history is preserved automatically)
+    chat = agent.start_chat(enable_automatic_function_calling=True)
 
     while True:
         # Get user input
@@ -31,19 +29,17 @@ async def main():
         
         print("🤖 AGENT: ", end="", flush=True)
         
-        # Run the agent via ADK runner
-        async for event in runner.run(
-            session_id=session_id,
-            input=ChatMessage(role="user", content=user_in)
-        ):
-            if event.text:
-                print(event.text, end="", flush=True)
+        try:
+            # Send message asynchronously
+            response = await chat.send_message_async(user_in)
+            if response.text:
+                print(response.text)
+        except Exception as e:
+            print(f"\n[Error] {e}")
         
-        print() # Newline after response
+        print() 
 
 if __name__ == "__main__":
-    # Windows SelectorEventLoop policy fix for some environments if needed, 
-    # but usually standard run works.
     if sys.platform == 'win32':
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
         
