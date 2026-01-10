@@ -36,7 +36,7 @@ The agent maintains context of the conversation. It handles the entire lifecycle
 
 ## 🛠️ Tech Stack
 * **Core Logic:** Python 3.11
-* **AI Model:** Google Gemini 1.5 Flash (via `google-generativeai`)
+* **AI Model:** Google Gemini 2.5 Flash (via `google-generativeai`)
 * **Agent Framework:** Native Automatic Function Calling (Tool Use)
 * **Environment:** Dotenv for secure key management
 
@@ -79,7 +79,5 @@ Try typing these inputs to see the Agent in action:
 ---
 
 *Built with ❤️ for Autonomous Hack 2026*
-
-```
 
 ```
