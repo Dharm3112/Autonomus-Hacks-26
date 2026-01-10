@@ -1,75 +1,93 @@
 import os
 import time
 import google.generativeai as genai
-from google.generativeai.types import content_types
-from collections.abc import Iterable
+from duckduckgo_search import DDGS
 from dotenv import load_dotenv
 
 # 1. Load your API Key
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
-# 2. Define the Tool (The "Hands")
-# The SDK allows you to pass a simple Python function as a tool.
+# --- THE UNIVERSAL SEARCH TOOL ---
+def real_web_search(query: str):
+    """
+    Performs a real-time web search to get live data.
+    """
+    print(f"\n[🌐 WEB SEARCH] Googling: '{query}'...")
+    try:
+        results = DDGS().text(query, max_results=4)
+        # We combine the top 4 search snippets into a single text block for the AI to read
+        search_data = "\n\n".join([f"Title: {r['title']}\nSnippet: {r['body']}\nLink: {r['href']}" for r in results])
+        return search_data
+    except Exception as e:
+        return f"Search Error: {str(e)}"
+
+# --- TOOL 1: SELLER MODE (Check Value) ---
 def check_market_price(item_name: str):
     """
-    Look up the current market value of a used item.
+    SELLER TOOL: Finds the average used price of an item.
     """
-    print(f"\n[⚙️ TOOL USE] Checking database for: '{item_name}'...")
-    time.sleep(1) # Simulate network delay for effect
-    
-    # Mock Database for the Demo
-    db = {
-        "ps5": 400,
-        "monitor": 180,
-        "macbook": 750,
-        "iphone": 500
-    }
-    
-    for key, price in db.items():
-        if key in item_name.lower():
-            return {"price": price, "currency": "USD", "demand": "High"}
-            
-    return {"price": 50, "currency": "USD", "demand": "Low (Unknown Item)"}
+    # We search for "used price" specifically to avoid new retail prices
+    search_query = f"current used price of {item_name} ebay facebook marketplace"
+    raw_data = real_web_search(search_query)
+    return raw_data
+
+# --- TOOL 2: BUYER MODE (Recommendations) ---
+def search_similar_products(product_query: str):
+    """
+    BUYER TOOL: Finds the best products and prices for a buyer.
+    """
+    # We search for "best [item] reviews price" to get comparisons
+    search_query = f"best {product_query} review price comparison 2024"
+    raw_data = real_web_search(search_query)
+    return raw_data
 
 # 3. Initialize the Autonomous Model
-# We explicitly enable 'automatic_function_calling' to make it an Agent.
-tools = [check_market_price]
+tools = [check_market_price, search_similar_products]
 
 model = genai.GenerativeModel(
     model_name='gemini-2.5-flash',
     tools=tools,
     system_instruction="""
-    You are 'The Closer', a ruthless negotiation agent.
+    You are 'Auto-Haggle', an Intelligent Commerce Agent.
+    You have access to Real-Time Web Search.
+
+    MODE 1: SELLER ASSISTANT (Protecting the User)
+    If the user is SELLING an item:
+    1. Use 'check_market_price' to search for the REAL used market value.
+    2. Read the search snippets to calculate an estimated average price.
+    3. If the buyer's offer is < 80% of that average -> ROAST THEM.
+    4. If the offer is fair -> Accept.
     
-    RULES:
-    1. When a user mentions an item, YOU MUST FIRST use the 'check_market_price' tool to value it.
-    2. Once you have the price, compare it to the user's offer.
-    3. If Offer < 80% of Market Price -> Roast them and reject.
-    4. If Offer >= 80% -> Accept.
-    
-    Keep responses short, punchy, and sarcastic.
+    MODE 2: BUYER ASSISTANT (Helping the User Buy)
+    If the user wants to BUY something:
+    1. Use 'search_similar_products' to find real options.
+    2. Read the search snippets to identify 3 distinct options (Budget, Best Overall, Premium).
+    3. Output a structured recommendation:
+       - **Product Name** | **Approx Price** | **Why it's good**
+    4. Recommend the best one for the user's specific needs.
+
+    CRITICAL: The tool returns raw search text. YOU must parse it to find the dollar amounts.
     """
 )
 
 # 4. The Chat Loop
 def start_agent():
     print("--------------------------------------------------")
-    print("🤖 AUTO-HAGGLE AGENT ONLINE (Gemini 2.5 Flash)")
+    print("🤖 AUTO-HAGGLE AGENT (Connected to Internet)")
     print("--------------------------------------------------")
     
     # Enable automatic tool use (Agent Mode)
     chat = model.start_chat(enable_automatic_function_calling=True)
     
     while True:
-        user_input = input("\n👤 BUYER: ")
+        user_input = input("\n👤 YOU: ")
         if user_input.lower() in ["quit", "exit"]:
             break
             
         print("🤖 AGENT THINKING...", end="", flush=True)
         
         try:
-            # The SDK handles the Tool Call -> Output -> Final Response loop automatically
             response = chat.send_message(user_input)
             print(f"\r🤖 AGENT: {response.text}")
             
