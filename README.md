@@ -98,8 +98,6 @@ streamlit run app.py
 
 ## 🧩 System Architecture
 
-```mermaid
-graph TD
     A[User Input] --> B{Intent Detection}
     B -->|Research| C[DuckDuckGo Search Tool]
     B -->|Negotiate| D[Market Price Check]
