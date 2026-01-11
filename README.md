@@ -126,5 +126,3 @@ streamlit run app.py
 ---
 
 **Made with ❤️ by Pair Programmers**
-
-```
