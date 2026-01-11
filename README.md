@@ -34,9 +34,9 @@ Unlike standard chatbots, Negotio.ai is **goal-oriented**. It doesn't just chat;
 ## 🛠️ Tech Stack
 
 * **Frontend:** [Streamlit](https://streamlit.io/) (Custom CSS for Dark "SaaS" UI)
-* **Core Intelligence:** [Google Gemini 1.5 Flash](https://deepmind.google/technologies/gemini/) (Low latency, High reasoning)
+* **Core Intelligence:** [Google Gemini 2.5 Flash](https://deepmind.google/technologies/gemini/) (Low latency, High reasoning)
 * **Tools:** `duckduckgo-search` (Live Web Access)
-* **Backend:** Pure Python 3.10+
+* **Backend:** Pure Python 3.13
 * **State Management:** `st.session_state` (Persistent Chat History)
 
 ---
